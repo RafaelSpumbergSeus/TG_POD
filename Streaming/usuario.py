@@ -18,7 +18,7 @@ class Usuario:
         for playlist in self.playlists:
             if playlist.nome == nome_playlist:
                 # Se encontrar, levanta um erro com uma mensagem clara.
-                # Tratar o erro no frontemd!
+                # Tratar o erro no frontend!
                 raise ValueError(f"O usuário '{self.nome}' já possui uma playlist chamada '{nome_playlist}'.")
 
         nova_playlist = Playlist(nome=nome_playlist, usuario=self)
