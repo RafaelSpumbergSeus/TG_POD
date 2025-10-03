@@ -20,8 +20,10 @@ class Usuario:
                 # Se encontrar, levanta um erro com uma mensagem clara.
                 # Tratar o erro no frontend!
                 raise ValueError(f"O usuário '{self.nome}' já possui uma playlist chamada '{nome_playlist}'.")
-
-        nova_playlist = Playlist(nome=nome_playlist, usuario=self)
+        
+        '''rever playlist'''
+        
+        nova_playlist = playlist(nome=nome_playlist, usuario=self)
         
         self.playlists.append(nova_playlist)
         

@@ -1,38 +1,38 @@
 class Playlist:
     """Representa uma playlist de mídias."""
     def __init__(self, nome: str, usuario):
-        self.nome = nome # [cite: 51]
-        self.usuario = usuario # [cite: 52]
-        self.itens = [] # [cite: 53]
-        self.reproducoes = 0 # [cite: 54]
+        self.nome = nome 
+        self.usuario = usuario 
+        self.itens = [] 
+        self.reproducoes = 0 
 
-    def adicionar_midia(self, midia): # [cite: 56]
+    def adicionar_midia(self, midia): 
         self.itens.append(midia)
 
-    def remover_midia(self, midia): # [cite: 57]
+    def remover_midia(self, midia): 
         self.itens.remove(midia)
 
-    def reproduzir(self): # [cite: 58]
+    def reproduzir(self): 
         """Reproduz todos os itens da playlist em sequência."""
         print(f"--- Reproduzindo a playlist: {self.nome} ---")
         for item in self.itens:
-            item.reproduzir() # Isso já incrementa a reprodução da mídia individual
+            item.reproduzir() 
         self.reproducoes += 1
 
-    def __add__(self, other): # [cite: 59]
+    def __add__(self, other): 
         """Concatena duas playlists."""
-        nova_playlist = Playlist(self.nome, self.usuario) # Mantém nome e usuário da primeira [cite: 60]
-        nova_playlist.itens = self.itens + other.itens # Concatena os itens [cite: 60]
-        nova_playlist.reproducoes = self.reproducoes + other.reproducoes # Soma as reproduções [cite: 60]
+        nova_playlist = Playlist(self.nome, self.usuario) 
+        nova_playlist.itens = self.itens + other.itens 
+        nova_playlist.reproducoes = self.reproducoes + other.reproducoes # Soma as reproduções 
         return nova_playlist
 
-    def __len__(self): # [cite: 61]
+    def __len__(self): 
         return len(self.itens)
 
-    def __getitem__(self, index): # [cite: 62]
+    def __getitem__(self, index): 
         return self.itens[index]
 
-    def __eq__(self, other): # [cite: 63]
+    def __eq__(self, other): 
         """Compara playlists pelo nome, criador e itens."""
         return self.nome == other.nome and self.usuario == other.usuario and self.itens == other.itens
 
