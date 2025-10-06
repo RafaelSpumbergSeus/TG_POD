@@ -1,3 +1,5 @@
+from .playlist import Playlist 
+
 class Usuario:
     #Usuário
     qntd_instancias = 0 
@@ -15,15 +17,12 @@ class Usuario:
     
     def criar_playlist(self, nome_playlist: str): 
         #Verifica se já existe uma playlist com o mesmo nome para este usuário 
-        for playlist in self.playlists:
-            if playlist.nome == nome_playlist:
+        for p in self.playlists:
+            if p.nome == nome_playlist:
                 # Se encontrar, levanta um erro com uma mensagem clara.
-                # Tratar o erro no frontend!
                 raise ValueError(f"O usuário '{self.nome}' já possui uma playlist chamada '{nome_playlist}'.")
-        
-        '''rever playlist'''
-        
-        nova_playlist = playlist(nome=nome_playlist, usuario=self)
+               
+        nova_playlist = Playlist(nome=nome_playlist, usuario=self)
         
         self.playlists.append(nova_playlist)
         
