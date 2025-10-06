@@ -10,10 +10,10 @@ class Analises:
         # Retorna os top_n primeiros elementos
         def obter_reproducoes(musica):
             return musica.reproducoes
+        
+        musicas_ordenadas = sorted(musicas, key=obter_reproducoes, reverse=True)
 
-            musicas_ordenas = sorted(musicas, key=obter_reproducoes, reverse=True)
-
-            return musicas_ordenadas[:top_n]
+        return musicas_ordenadas[:top_n]
 
     
     @staticmethod

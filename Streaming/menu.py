@@ -90,25 +90,29 @@ def exibir_menu_usuario(usuario, midias, playlists, usuarios_gerais):
         if not os.path.exists('relatorios'):
             os.makedirs('relatorios')
 
-        # Coleta as estatísticas usando a classe Analises
-        top_5_musicas = Analises.top_musicas_reproduzidas([m for m in midias if hasattr(m, 'genero')], 5)
+        lista_de_musicas = [m for m in midias if hasattr(m, 'genero')]
+        
+        top_5_musicas = Analises.top_musicas_reproduzidas(lista_de_musicas, 5)
         playlist_pop = Analises.playlist_mais_popular(playlists)
         user_ativo = Analises.usuario_mais_ativo(usuarios_gerais)
-        medias = Analises.media_avaliacoes([m for m in midias if hasattr(m, 'genero')])
+        medias = Analises.media_avaliacoes(lista_de_musicas)
         total_plays = Analises.total_reproducoes(usuarios_gerais)
 
         # Formata o conteúdo do relatório
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        relatorio_conteudo = f"""
-# Relatório de Análises do MusicStream
+        relatorio_conteudo = f"""# Relatório de Análises do MusicStream
 Gerado em: {timestamp}
 
 ## Músicas Mais Populares (Top 5)
 """
-        for i, m in enumerate(top_5_musicas):
-            relatorio_conteudo += f"{i+1}. {m.titulo} - {m.artista} ({m.reproducoes} reproduções)\n"
+        if top_5_musicas:
+            for i, m in enumerate(top_5_musicas):
+                relatorio_conteudo += f"{i+1}. {m.titulo} - {m.artista} ({m.reproducoes} reproduções)\n"
+        else:
+            relatorio_conteudo += "Nenhuma música foi reproduzida ainda.\n"
 
         relatorio_conteudo += f"""
+
 ## Playlist Mais Popular
 - {playlist_pop.nome if playlist_pop else 'N/A'} ({playlist_pop.reproducoes if playlist_pop else 0} reproduções)
 
@@ -120,12 +124,15 @@ Gerado em: {timestamp}
 
 ## Média de Avaliações por Música
 """
-        for titulo, media in medias.items():
-            relatorio_conteudo += f"- {titulo}: {media:.2f}\n"
+        if medias:
+            for titulo, media in medias.items():
+                relatorio_conteudo += f"- {titulo}: {media:.2f}\n"
+        else:
+            relatorio_conteudo += "Nenhuma música para avaliar.\n"
 
         # Salva o relatório em um arquivo
         with open("relatorios/relatorio.txt", "w", encoding="utf-8") as f:
             f.write(relatorio_conteudo)
         
         st.success("Relatório salvo em 'relatorios/relatorio.txt'!")
-        st.balloons()       
+        st.balloons()     
