@@ -1,3 +1,4 @@
+from .arquivo_de_midia import ArquivoDeMidia
 class Playlist:
     """Representa uma playlist de mídias."""
     def __init__(self, nome: str, usuario):

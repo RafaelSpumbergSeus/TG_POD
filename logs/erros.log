@@ -1,0 +1,5 @@
+2025-10-05 23:17:17,993 - ERRO: Falha ao criar a playlist 'Favoritas'. Detalhe: cannot access local variable 'playlist' where it is not associated with a value
+2025-10-05 23:17:17,994 - ERRO: Falha ao criar a playlist 'Treino'. Detalhe: cannot access local variable 'playlist' where it is not associated with a value
+2025-10-05 23:17:17,994 - ERRO: Falha ao criar a playlist 'Relax'. Detalhe: cannot access local variable 'playlist' where it is not associated with a value
+2025-10-05 23:17:17,994 - ERRO: Falha ao criar a playlist 'Estudos'. Detalhe: cannot access local variable 'playlist' where it is not associated with a value
+2025-10-05 23:17:17,994 - ERRO: Falha ao criar a playlist 'Chill'. Detalhe: cannot access local variable 'playlist' where it is not associated with a value

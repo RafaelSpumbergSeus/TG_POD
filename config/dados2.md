@@ -1,6 +1,4 @@
-# entrada 2
 # Usuários
-
 - nome: Ana  
     playlists: [Favoritas, Treino]
     
