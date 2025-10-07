@@ -2,6 +2,11 @@ from abc import ABC, abstractmethod
 
 class ArquivoDeMidia(ABC):
     def __init__(self, titulo: str, artista: str, duracao: int):
+        # validação de tamanho 
+
+        if duracao < 0:
+            raise ValueError("A duração não pode ser negativa.")
+        
         self.titulo = titulo
         self.artista = artista
         self.duracao = duracao

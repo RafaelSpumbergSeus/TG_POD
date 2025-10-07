@@ -7,9 +7,12 @@ class Playlist:
         self.itens = [] 
         self.reproducoes = 0 
 
-    def adicionar_midia(self, midia): 
-        self.itens.append(midia)
-
+    def adicionar_midia(self, midia):
+        if midia not in self.itens:
+            self.itens.append(midia)
+        else:
+            raise ValueError("A mídia '{midia.título}' já está na playlist '{self.nome}'.") 
+        
     def remover_midia(self, midia): 
         self.itens.remove(midia)
 

@@ -9,7 +9,7 @@ def exibir_menu_inicial(usuarios):
     """
     Exibe o menu para login, criação de usuário e listagem de usuários.
     """
-    st.header("Bem-vindo ao Streming de Música Genérico!")
+    st.header("Bem-vindo!")
 
     #Primeira opcao 
     st.subheader("Entrar como usuário")
@@ -23,16 +23,17 @@ def exibir_menu_inicial(usuarios):
             st.rerun()
 
     with st.expander("Criar novo usuário"):
-        novo_nome = st.text_input("Digite o nome do novo usuário:")
+        novo_nome = st.text_input("Digite o nome do novo usuário:", key="novo_usuario_input")
         if st.button("Criar"):
             if any(u.nome == novo_nome for u in usuarios):
-                st.error(f"Usuário '{novo_nome}' já existe. Escolha outro nome.")
+                st.error(f"Erro: Usuário com o nome '{novo_nome}' já existe.")
             elif not novo_nome:
-                st.warning("O nome do usuário não pode ser vazio.")
+                st.warning("O nome de usuário não pode estar em branco.")
             else:
-                novo_usuario = Usuario(novo_nome)
+                novo_usuario = Usuario(nome=novo_nome)
                 usuarios.append(novo_usuario)
                 st.success(f"Usuário '{novo_nome}' criado com sucesso!")
+                st.rerun()
 
     with st.expander("Listar usuários"):
         for u in usuarios:
@@ -51,7 +52,7 @@ def exibir_menu_usuario(usuario, midias, playlists, usuarios_gerais):
     st.title("Bibilioteca de Músicas e Podcasts")
 
     # Listar as mídias disponíveis
-    st.subheader("Músicas Disponíveis")
+    st.subheader("Músicas e Podcasts")
     for midia in midias:
         col1, col2 = st.columns([4, 1])
         with col1:
@@ -72,18 +73,58 @@ def exibir_menu_usuario(usuario, midias, playlists, usuarios_gerais):
                 p.reproduzir()
                 st.success(f"Playlist '{p.nome}' reproduzida!")
 
-    # Ações do Usuário
-    with st.sidebar.expander("Ações"):
+    with st.sidebar.expander("Gerenciar Playlists"):
         st.subheader("Criar Nova Playlist")
-        nome_nova_playlist = st.text_input("Nome da nova playlist:")
+        nome_nova_playlist = st.text_input("Nome da nova playlist:", key="nova_playlist_input")
         if st.button("Criar Playlist"):
-            try:
-                usuario.criar_playlist(nome_nova_playlist)
-                st.success(f"Playlist '{nome_nova_playlist}' criada!")
-                st.rerun()
-            except ValueError as e:
-                st.error(str(e)) #
+            if not nome_nova_playlist:
+                st.warning("O nome da playlist não pode estar em branco.")
+            else:
+                try:
+                    usuario.criar_playlist(nome_nova_playlist)
+                    st.success(f"Playlist '{nome_nova_playlist}' criada!")
+                    st.rerun()
+                except ValueError as e:
+                    st.error(str(e))
+        
+        st.divider()
 
+        st.subheader("Adicionar Mídia à Playlist")
+        # Só mostra esta opção se o usuário tiver playlists
+        if usuario.playlists:
+            # 1. Caixa de seleção para escolher a playlist
+            playlist_selecionada_nome = st.selectbox(
+                "Escolha a playlist:",
+                [p.nome for p in usuario.playlists],
+                key="select_playlist_to_add_to"
+            )
+
+            # 2. Caixa de seleção para escolher a mídia
+            midia_selecionada_titulo = st.selectbox(
+                "Escolha a música ou podcast:",
+                [m.titulo for m in midias],
+                key="select_media_to_add" # Chave única
+            )
+
+            if st.button("Adicionar"):
+                playlist_obj = next((p for p in usuario.playlists if p.nome == playlist_selecionada_nome), None)
+                midia_obj = next((m for m in midias if m.titulo == midia_selecionada_titulo), None)
+                
+                if playlist_obj and midia_obj:
+                    try:
+                        # Tenta adicionar a mídia. Pode dar ValueError se for duplicada.
+                        playlist_obj.adicionar_midia(midia_obj)
+                        st.success(f"'{midia_obj.titulo}' adicionado(a) à playlist '{playlist_obj.nome}'!")
+                        # O st.rerun() fica fora do try/except para garantir que a página recarregue.
+                    except ValueError as e:
+                        # Mostra o erro de item duplicado para o usuário.
+                        st.warning(str(e))
+                
+                # Força o recarregamento da página para atualizar a contagem de itens
+                st.rerun() 
+        else:
+            st.info("Você precisa criar uma playlist antes de poder adicionar mídias.")
+    
     # Relatórios
     if st.sidebar.button("Gerar Relatório de Análises"):
         # Garante que o diretório de relatórios exista
