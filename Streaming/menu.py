@@ -157,6 +157,45 @@ def exibir_menu_usuario(usuario, midias, playlists, usuarios_gerais):
         else:
             st.info("Você precisa criar uma playlist antes de poder adicionar mídias.")
     
+    #Mostra a opção apenas se o usuário tiver 2 ou mais playlists
+        if len(usuario.playlists) >= 2:
+            nomes_das_playlists = [p.nome for p in usuario.playlists]
+            
+            #Seleciona a primeira playlist
+            p1_nome = st.selectbox(
+                "Escolha a primeira playlist:",
+                nomes_das_playlists,
+                key="concat_p1"
+            )
+
+            #Seleciona a segunda playlist
+            p2_nome = st.selectbox(
+                "Escolha a segunda playlist:",
+                nomes_das_playlists,
+                index=1 if len(nomes_das_playlists) > 1 else 0, #Evita que as duas sejam iguais no início
+                key="concat_p2"
+            )
+
+            if st.button("Concatenar"):
+                if p1_nome == p2_nome:
+                    st.warning("Por favor, selecione duas playlists diferentes.")
+                else:
+                    #Encontra os objetos das playlists selecionadas
+                    p1_obj = next((p for p in usuario.playlists if p.nome == p1_nome), None)
+                    p2_obj = next((p for p in usuario.playlists if p.nome == p2_nome), None)
+
+                    if p1_obj and p2_obj:
+                        playlist_resultante = p1_obj + p2_obj
+                        
+                        # Adiciona a nova playlist à lista do usuário e à lista global
+                        usuario.playlists.append(playlist_resultante)
+                        playlists.append(playlist_resultante)
+
+                        st.success(f"Playlist '{playlist_resultante.nome}' criada com sucesso!")
+                        st.rerun()
+        else:
+            st.info("Você precisa de pelo menos duas playlists para concatenar.")
+
     # Relatórios
     if st.sidebar.button("Gerar Relatório de Análises"):
         # Garante que o diretório de relatórios exista

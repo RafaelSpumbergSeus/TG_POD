@@ -15,15 +15,17 @@ class ArquivoDeMidia(ABC):
     @abstractmethod
     def reproduzir(self):
         #Simula a reprodução do arquivo de mídia
-        print(f"Reproduzindo {self.titulo} de {self.artista} ({self.duracao} minutos)")
+        print(f"Reproduzindo {self.titulo} de {self.artista} ({self.duracao}s)")
         self.reproducoes += 1
 
-    @abstractmethod
     def __eq__(self, other): 
         # Compara dois arquivos de mídia
-        # Tirar o print
-        print(f"Comparando {self} com {other} ({type(other)})")
+        if not isinstance(other, ArquivoDeMidia):
+            return NotImplemented
         return self.titulo == other.titulo and self.artista == other.artista
+    
+    def __hash__(self):
+        return hash((self.titulo, self.artista))
     
     def __str__(self):
         return f"{self.titulo} por {self.artista}"

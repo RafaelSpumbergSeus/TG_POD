@@ -19,5 +19,4 @@ class Musica(ArquivoDeMidia):
     def reproduzir(self):
         super().reproduzir()
 
-    def __eq__(self, other):
-        return super().__eq__(other)
+    

@@ -14,5 +14,3 @@ class Podcast(ArquivoDeMidia):
         print(f"Reproduzindo Podcast: {self.titulo} (Ep. {self.episodio}) - Host: {self.host}")
         self.reproducoes += 1
 
-    def __eq__(self, other):
-        return super().__eq__(other)

@@ -24,11 +24,16 @@ class Playlist:
         self.reproducoes += 1
 
     def __add__(self, other): 
-        """Concatena duas playlists."""
-        nova_playlist = Playlist(self.nome, self.usuario) 
-        nova_playlist.itens = self.itens + other.itens 
-        nova_playlist.reproducoes = self.reproducoes + other.reproducoes 
-        return nova_playlist
+        if not isinstance(other, Playlist):
+           return NotImplemented
+       
+        novo_nome = f"{self.nome} + {other.nome}"
+        playlist_concatenada = Playlist(nome=novo_nome, usuario=self.usuario)
+        itens_combinados = self.itens + other.itens
+        playlist_concatenada.itens = list(dict.fromkeys(itens_combinados))
+        playlist_concatenada.reproducoes = self.reproducoes + other.reproducoes
+        
+        return playlist_concatenada
 
     def __len__(self): 
         return len(self.itens)
