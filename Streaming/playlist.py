@@ -11,14 +11,14 @@ class Playlist:
         if midia not in self.itens:
             self.itens.append(midia)
         else:
-            raise ValueError("A mídia '{midia.título}' já está na playlist '{self.nome}'.") 
+            raise ValueError(f"A mídia '{midia.titulo}' já está na playlist '{self.nome}'.") 
         
     def remover_midia(self, midia): 
         self.itens.remove(midia)
 
     def reproduzir(self): 
         """Reproduz todos os itens da playlist em sequência."""
-        print(f"--- Reproduzindo a playlist: {self.nome} ---")
+        print(f"Reproduzindo a playlist: {self.nome}")
         for item in self.itens:
             item.reproduzir() 
         self.reproducoes += 1
@@ -27,7 +27,7 @@ class Playlist:
         """Concatena duas playlists."""
         nova_playlist = Playlist(self.nome, self.usuario) 
         nova_playlist.itens = self.itens + other.itens 
-        nova_playlist.reproducoes = self.reproducoes + other.reproducoes # Soma as reproduções 
+        nova_playlist.reproducoes = self.reproducoes + other.reproducoes 
         return nova_playlist
 
     def __len__(self): 

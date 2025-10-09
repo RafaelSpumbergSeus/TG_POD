@@ -1,4 +1,6 @@
 from .playlist import Playlist 
+from .musica import Musica
+from .podcast import Podcast    
 
 class Usuario:
     #Usuário

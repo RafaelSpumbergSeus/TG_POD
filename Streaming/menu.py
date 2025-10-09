@@ -4,6 +4,16 @@ import os
 
 from .usuario import Usuario 
 from .analises import Analises
+from .playlist import Playlist
+
+if "usuarios" not in st.session_state:
+    st.session_state["usuarios"] = []
+
+if "playlists" not in st.session_state:
+    st.session_state["playlists"] = []
+
+if "midias" not in st.session_state:
+    st.session_state["midias"] = []
 
 def exibir_menu_inicial(usuarios):
     """
@@ -13,8 +23,8 @@ def exibir_menu_inicial(usuarios):
 
     #Primeira opcao 
     st.subheader("Entrar como usuário")
-    nomes_usuaiors = [u.nome for u in usuarios]
-    usuario_selecionado = st.selectbox("Selecione seu usuário:", nomes_usuaiors)
+    nomes_usuarios = [u.nome for u in usuarios]
+    usuario_selecionado = st.selectbox("Selecione seu usuário:", nomes_usuarios)
 
     if st.button("Entrar"):
         usuario_encontrado = next((u for u in usuarios if u.nome == usuario_selecionado), None)
@@ -76,12 +86,14 @@ def exibir_menu_usuario(usuario, midias, playlists, usuarios_gerais):
     with st.sidebar.expander("Gerenciar Playlists"):
         st.subheader("Criar Nova Playlist")
         nome_nova_playlist = st.text_input("Nome da nova playlist:", key="nova_playlist_input")
+        
         if st.button("Criar Playlist"):
             if not nome_nova_playlist:
                 st.warning("O nome da playlist não pode estar em branco.")
             else:
                 try:
-                    usuario.criar_playlist(nome_nova_playlist)
+                    nova_playlist_obj = usuario.criar_playlist(nome_nova_playlist)
+                    st.session_state["playlists"].append(nova_playlist_obj)  
                     st.success(f"Playlist '{nome_nova_playlist}' criada!")
                     st.rerun()
                 except ValueError as e:
@@ -90,20 +102,19 @@ def exibir_menu_usuario(usuario, midias, playlists, usuarios_gerais):
         st.divider()
 
         st.subheader("Adicionar Mídia à Playlist")
-        # Só mostra esta opção se o usuário tiver playlists
         if usuario.playlists:
-            # 1. Caixa de seleção para escolher a playlist
+            nomes_das_playlists_do_usuario = [p.nome for p in usuario.playlists]
+            
             playlist_selecionada_nome = st.selectbox(
                 "Escolha a playlist:",
-                [p.nome for p in usuario.playlists],
-                key="select_playlist_to_add_to"
+                nomes_das_playlists_do_usuario,
+                key="select_playlist_to_add_to" 
             )
 
-            # 2. Caixa de seleção para escolher a mídia
             midia_selecionada_titulo = st.selectbox(
                 "Escolha a música ou podcast:",
                 [m.titulo for m in midias],
-                key="select_media_to_add" # Chave única
+                key="select_media_to_add"
             )
 
             if st.button("Adicionar"):
@@ -112,16 +123,13 @@ def exibir_menu_usuario(usuario, midias, playlists, usuarios_gerais):
                 
                 if playlist_obj and midia_obj:
                     try:
-                        # Tenta adicionar a mídia. Pode dar ValueError se for duplicada.
                         playlist_obj.adicionar_midia(midia_obj)
                         st.success(f"'{midia_obj.titulo}' adicionado(a) à playlist '{playlist_obj.nome}'!")
-                        # O st.rerun() fica fora do try/except para garantir que a página recarregue.
                     except ValueError as e:
-                        # Mostra o erro de item duplicado para o usuário.
                         st.warning(str(e))
                 
-                # Força o recarregamento da página para atualizar a contagem de itens
-                st.rerun() 
+                st.rerun()
+                
         else:
             st.info("Você precisa criar uma playlist antes de poder adicionar mídias.")
     

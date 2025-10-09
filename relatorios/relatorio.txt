@@ -1,22 +1,22 @@
 # Relatório de Análises do MusicStream
-Gerado em: 2025-10-06 23:43:33
+Gerado em: 2025-10-08 23:54:54
 
 ## Músicas Mais Populares (Top 5)
-1. Bohemian Rhapsody - Queen (0 reproduções)
-2. Shape of You - Ed Sheeran (0 reproduções)
-3. Lose Yourself - Eminem (0 reproduções)
-4. Fur Elise - Beethoven (0 reproduções)
-5. Rolling in the Deep - Adele (0 reproduções)
+1. Bohemian Rhapsody - Queen (4 reproduções)
+2. Shape of You - Ed Sheeran (3 reproduções)
+3. Lose Yourself - Eminem (3 reproduções)
+4. Rolling in the Deep - Adele (1 reproduções)
+5. Fur Elise - Beethoven (0 reproduções)
 
 
 ## Playlist Mais Popular
-- Favoritas (0 reproduções)
+- N/A (0 reproduções)
 
 ## Usuário Mais Ativo
-- Ana (0 mídias ouvidas)
+- Ana (8 mídias ouvidas)
 
 ## Total de Reproduções no Sistema
-- 0
+- 8
 
 ## Média de Avaliações por Música
 - Bohemian Rhapsody: 0.00
