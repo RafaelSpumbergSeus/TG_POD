@@ -1,19 +1,11 @@
 import streamlit as st
 from datetime import datetime
 import os 
+import sys
 
 from .usuario import Usuario 
 from .analises import Analises
 from .playlist import Playlist
-
-if "usuarios" not in st.session_state:
-    st.session_state["usuarios"] = []
-
-if "playlists" not in st.session_state:
-    st.session_state["playlists"] = []
-
-if "midias" not in st.session_state:
-    st.session_state["midias"] = []
 
 def exibir_menu_inicial(usuarios):
     """
@@ -21,16 +13,28 @@ def exibir_menu_inicial(usuarios):
     """
     st.header("Bem-vindo!")
 
-    #Primeira opcao 
-    st.subheader("Entrar como usuário")
-    nomes_usuarios = [u.nome for u in usuarios]
-    usuario_selecionado = st.selectbox("Selecione seu usuário:", nomes_usuarios)
-
-    if st.button("Entrar"):
+    st.subheader("Opções")
+    col1, col2, _ = st.columns([1, 1, 4]) 
+    
+    
+    if col1.button("Entrar", use_container_width=True):
+        usuario_selecionado = st.session_state.get('usuario_selecionado_nome')
         usuario_encontrado = next((u for u in usuarios if u.nome == usuario_selecionado), None)
         if usuario_encontrado:
             st.session_state['usuario_logado'] = usuario_encontrado
             st.rerun()
+
+    # Botão para fechar o app
+    if col2.button("Fechar App", type="primary", use_container_width=True):
+        st.success("Aplicação encerrada. Você já pode fechar esta aba.")
+        sys.exit() 
+    st.divider()
+    
+    st.subheader("Login")
+    nomes_usuarios = [u.nome for u in usuarios]
+    
+    st.selectbox("Selecione seu usuário:", nomes_usuarios, key='usuario_selecionado_nome')
+
 
     with st.expander("Criar novo usuário"):
         novo_nome = st.text_input("Digite o nome do novo usuário:", key="novo_usuario_input")
@@ -59,7 +63,27 @@ def exibir_menu_usuario(usuario, midias, playlists, usuarios_gerais):
         st.session_state['usuario_logado'] = None
         st.rerun()
 
+    st.sidebar.divider()
+    if st.sidebar.button("Ver/Ocultar Top 5 Músicas"):
+        st.session_state.mostrar_top_musicas = not st.session_state.get('mostrar_top_musicas', False)
+    st.sidebar.divider()
+
     st.title("Bibilioteca de Músicas e Podcasts")
+
+    if st.session_state.get('mostrar_top_musicas', False):
+        with st.container(border=True): 
+            st.subheader("🏆 Top 5 Músicas Mais Reproduzidas")
+            
+            lista_de_musicas = [m for m in midias if hasattr(m, 'genero')]
+            top_5 = Analises.top_musicas_reproduzidas(lista_de_musicas, 5) 
+
+            if top_5:
+                cols = st.columns(len(top_5))
+                for i, musica in enumerate(top_5):
+                    with cols[i]:
+                        st.metric(label=f"#{i+1}. {musica.titulo}", value=f"{musica.reproducoes} plays", delta=musica.artista)
+            else:
+                st.info("Nenhuma música foi reproduzida para montar um ranking.")
 
     # Listar as mídias disponíveis
     st.subheader("Músicas e Podcasts")

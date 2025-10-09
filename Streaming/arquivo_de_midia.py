@@ -21,6 +21,8 @@ class ArquivoDeMidia(ABC):
     @abstractmethod
     def __eq__(self, other): 
         # Compara dois arquivos de mídia
+        # Tirar o print
+        print(f"Comparando {self} com {other} ({type(other)})")
         return self.titulo == other.titulo and self.artista == other.artista
     
     def __str__(self):

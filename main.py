@@ -11,6 +11,7 @@ if 'dados_carregados' not in st.session_state:
         st.session_state.playlists = dados['playlists']
         st.session_state.usuario_logado = None 
         st.session_state.dados_carregados = True
+        st.session_state.mostrar_top_musicas = False
     else:
         # Se os dados não carregarem, mostra um erro e para
         st.error("Falha crítica ao carregar os dados. Verifique o arquivo 'logs/erros.log'.")
